@@ -25,6 +25,7 @@ Sides:
 - Start app on your Android phone.
 - Power on your robot
 - App should display all available items or their icons (app take it from assets folder).
+
 OR
 - Download my world from releases.
 
