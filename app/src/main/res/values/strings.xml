@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">OpenStorage</string>
+
+    <string-array name="sides">
+        <item>Bottom</item>
+        <item>Top</item>
+        <item>Back</item>
+        <item>Front</item>
+        <item>Right</item>
+        <item>Left</item>
+    </string-array>
+</resources>
