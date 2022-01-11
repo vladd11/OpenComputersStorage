@@ -13,20 +13,11 @@ Steps to transfer it to your world:
 ![image](https://user-images.githubusercontent.com/27568333/148928904-aadc7819-ec78-422a-84d8-b9223e06003d.png)
 - Upload all lua files and .shrc to robot's home using wget.
 - Create chests directory and add a files with chest names (any string).
-- In this files you should write the chest coordinate and side (format: X Y Z SIDE)
-Sides:
-0. Down
-1. Up
-2. Back
-3. Forward
-4. Right
-5. Left
-
-- Start app on your Android phone.
+- Install & start app on your Android phone.
 - Power on your robot
-- App should display all available items or their icons (app take it from assets folder).
+- Click "add" icon in the right corner of app and add all your chests there.
 
 OR
-- Download my world from releases.
+- Download my world from releases to test.
 
 This program works really poor, it should be debugged and rewrited.
