@@ -28,10 +28,10 @@ public class Server extends NanoHTTPD {
     private final List<Chest> updateList = new ArrayList<>();
     private final List<Chest> chestList = new ArrayList<>();
     private final List<Item> internalItems = new ArrayList<>();
+    private final List<Item> itemList = new ArrayList<>();
     private final TextureAtlas atlas;
     private final MutableLiveData<Boolean> isDelivered;
     private boolean sort;
-    private final List<Item> itemList = new ArrayList<>();
     private ItemAdapter adapter;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -53,6 +53,7 @@ public class Server extends NanoHTTPD {
                 if (sort && !internalItems.isEmpty() && !chestList.isEmpty()) {
                     generator.sortItems(internalItems, chestList);
                     sort = false;
+                    handler.post(() -> isDelivered.setValue(true));
                 }
                 updateList.clear();
                 generator.listItems();
@@ -60,6 +61,7 @@ public class Server extends NanoHTTPD {
             } else if (session.getMethod() == Method.POST) {
                 itemList.clear();
                 chestList.clear();
+                internalItems.clear();
 
                 int contentLength = Integer.parseInt(Objects.requireNonNull(session.getHeaders().get("content-length")));
                 byte[] buffer = new byte[contentLength];
@@ -105,7 +107,7 @@ public class Server extends NanoHTTPD {
                         final String[] sep = line.split(" ");
                         final String itemName = sep[0];
                         if (itemName.equals("minecraft:air")) {
-                            currentChest.incrementFreeSpace();
+                            currentChest.addFreeSpaceSlot(position + 1);
                             continue;
                         }
                         final int count = Integer.parseInt(sep[1]);

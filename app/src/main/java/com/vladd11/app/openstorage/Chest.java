@@ -1,5 +1,7 @@
 package com.vladd11.app.openstorage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Chest {
@@ -8,7 +10,7 @@ public class Chest {
     public final int positionZ;
     public final String id;
     public final Side side;
-    private int freeSpace;
+    private final List<Integer> freeSpaceSlots;
 
     public Chest(int positionX, int positionY, int positionZ, String id, Side side) {
         this.positionX = positionX;
@@ -16,6 +18,7 @@ public class Chest {
         this.positionZ = positionZ;
         this.id = id;
         this.side = side;
+        this.freeSpaceSlots = new ArrayList<>();
     }
 
     @Override
@@ -31,16 +34,11 @@ public class Chest {
         return Objects.hash(positionX, positionY, positionZ, id, side);
     }
 
-    public int getFreeSpace() {
-        return freeSpace;
+    public List<Integer> getFreeSpaceSlots() {
+        return freeSpaceSlots;
     }
 
-    public void setFreeSpace(int freeSpace) {
-        if(freeSpace < 0) throw new IllegalArgumentException("freeSpace must be >= 0");
-        this.freeSpace = freeSpace;
-    }
-
-    public int incrementFreeSpace() {
-        return freeSpace++;
+    public boolean addFreeSpaceSlot(int slot) {
+        return freeSpaceSlots.add(slot);
     }
 }

@@ -61,23 +61,23 @@ public class ProgramGenerator {
     @SuppressWarnings("ComparatorCombinators") // items.sort requires Android N
     public void sortItems(List<Item> items, List<Chest> chests) {
         Collections.sort(chests, (o1, o2) -> o1.positionX - o2.positionX);
-        final List<AbstractMap.SimpleImmutableEntry<Chest, Item>> sort = new ArrayList<>();
+        final List<SortEntry> sort = new ArrayList<>();
         for (Item item : items) {
             for (Chest chest : chests) {
-                if(chest.getFreeSpace() > 0) {
-                    sort.add(new AbstractMap.SimpleImmutableEntry<>(chest, item));
+                if(chest.getFreeSpaceSlots().size() > 0) {
+                    sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
                     break;
                 }
             }
         }
 
         for (int i = 0; i < sort.size(); i++) {
-            final AbstractMap.SimpleImmutableEntry<Chest, Item> entry = sort.get(i);
-            final Chest chest = entry.getKey();
-            final Item item = entry.getValue();
+            final SortEntry entry = sort.get(i);
+            final Chest chest = entry.getChest();
+            final Item item = entry.getItem();
 
             Side side = chest.side;
-            if (i == 0 || !sort.get(i - 1).getKey().equals(chest)) {
+            if (i == 0 || !sort.get(i - 1).getChest().equals(chest)) {
                 goTo(chest.positionX, chest.positionY, chest.positionZ);
                 side = turnToSide(chest.side);
             } else if (side.isInaccessible()) {
@@ -91,12 +91,12 @@ public class ProgramGenerator {
             builder.append("component.inventory_controller.dropIntoSlot(");
             builder.append(side.ordinal());
             builder.append(',');
-            builder.append(item.position);
+            builder.append(entry.slot);
             builder.append(',');
             builder.append(item.count);
             builder.append(")\n");
 
-            if (i == sort.size() - 1 || !sort.get(i + 1).getKey().equals(chest)) {
+            if (i == sort.size() - 1 || !sort.get(i + 1).getChest().equals(chest)) {
                 updateChest(chest, side);
                 turnFront();
             }
@@ -157,5 +157,29 @@ public class ProgramGenerator {
     @Override
     public String toString() {
         return builder.toString();
+    }
+
+    static class SortEntry {
+        private final Chest chest;
+        private final Item item;
+        private final int slot;
+
+        public SortEntry(Chest chest, Item item, int slot) {
+            this.chest = chest;
+            this.item = item;
+            this.slot = slot;
+        }
+
+        public Chest getChest() {
+            return chest;
+        }
+
+        public Item getItem() {
+            return item;
+        }
+
+        public int getSlot() {
+            return slot;
+        }
     }
 }
