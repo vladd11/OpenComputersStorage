@@ -11,6 +11,7 @@ public class Chest {
     public final String id;
     public final Side side;
     private final List<Integer> freeSpaceSlots;
+    private List<Item> items;
 
     public Chest(int positionX, int positionY, int positionZ, String id, Side side) {
         this.positionX = positionX;
@@ -19,6 +20,7 @@ public class Chest {
         this.id = id;
         this.side = side;
         this.freeSpaceSlots = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     @Override
@@ -40,5 +42,13 @@ public class Chest {
 
     public boolean addFreeSpaceSlot(int slot) {
         return freeSpaceSlots.add(slot);
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 }

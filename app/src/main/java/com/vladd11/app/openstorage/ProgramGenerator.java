@@ -63,10 +63,17 @@ public class ProgramGenerator {
         Collections.sort(chests, (o1, o2) -> o1.positionX - o2.positionX);
         final List<SortEntry> sort = new ArrayList<>();
         for (Item item : items) {
-            for (Chest chest : chests) {
+            chestLoop: for (Chest chest : chests) {
                 if(chest.getFreeSpaceSlots().size() > 0) {
                     sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
                     break;
+                } else {
+                    for (Item checkItem : chest.getItems()) {
+                        if(64 - checkItem.count <= item.count) { // TODO: fix with items like tools (where maxStack < 64)
+                            sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
+                            break chestLoop;
+                        }
+                    }
                 }
             }
         }

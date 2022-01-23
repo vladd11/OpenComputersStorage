@@ -10,13 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.vladd11.app.openstorage.ui.ItemAdapter;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -73,7 +71,7 @@ public class Server extends NanoHTTPD {
                 final List<String> arr = new LinkedList<>(Arrays.asList(result.split(Pattern.quote("|"))));
 
                 Scanner scanner = new Scanner(arr.get(0).trim());
-                for (int position = 0; scanner.hasNextLine(); position++) {
+                for (int position = 1; scanner.hasNextLine(); position++) { // In lua arrays start from 1
                     final String line = scanner.nextLine();
                     final String[] sep = line.split(" ");
                     final String itemName = sep[0];
@@ -107,7 +105,7 @@ public class Server extends NanoHTTPD {
                         final String[] sep = line.split(" ");
                         final String itemName = sep[0];
                         if (itemName.equals("minecraft:air")) {
-                            currentChest.addFreeSpaceSlot(position + 1);
+                            currentChest.addFreeSpaceSlot(position);
                             continue;
                         }
                         final int count = Integer.parseInt(sep[1]);
@@ -116,27 +114,33 @@ public class Server extends NanoHTTPD {
                         // The item have additional info (that can change texture) and I can't check it.
                         // I won't try to display textures for these items
                         if (isNBT) {
-                            itemList.add(new Item(itemName,
+                            final Item item = new Item(itemName,
                                     null,
                                     count,
                                     currentChest,
                                     joinAllFromIndex(sep, 3),
-                                    position + 1));
+                                    position);
+                            itemList.add(item);
+                            currentChest.addItem(item);
                         } else {
                             try {
-                                itemList.add(new Item(itemName,
+                                final Item item = new Item(itemName,
                                         atlas.loadTexture(itemName),
                                         count,
                                         currentChest,
                                         joinAllFromIndex(sep, 3),
-                                        position + 1)); // In lua array index start from 1
+                                        position);
+                                itemList.add(item);
+                                currentChest.addItem(item);
                             } catch (IOException e) {
-                                itemList.add(new Item(itemName,
+                                final Item item = new Item(itemName,
                                         null,
                                         count,
                                         currentChest,
                                         joinAllFromIndex(sep, 3),
-                                        position + 1));
+                                        position);
+                                itemList.add(item);
+                                currentChest.addItem(item);
                                 e.printStackTrace();
                             }
                         }
