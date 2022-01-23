@@ -31,7 +31,7 @@ public class TextureAtlas {
 
     private Drawable loadTextureFromAssets(String textureName) throws IOException {
         final String[] spl = textureName.split(Pattern.quote(":"));
-        final String path = Paths.get(spl[0], spl[1]).toString() + ".png";
+        final String path = spl[0] + '/' + spl[1] + ".png";
         if(new File(path).exists()) {
             return Drawable.createFromStream(context.getAssets().open(path), null);
         }

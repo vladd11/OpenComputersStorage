@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import com.vladd11.app.openstorage.Chest;
 import com.vladd11.app.openstorage.R;
 import com.vladd11.app.openstorage.Server;
+import com.vladd11.app.openstorage.Side;
 
 public class ChestUpdateDialog extends DialogFragment {
     private final Server server;
@@ -45,11 +46,11 @@ public class ChestUpdateDialog extends DialogFragment {
                 android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        final int[] side = {0};
+        final Side[] side = new Side[1];
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                side[0] = position;
+                side[0] = Side.values()[position];
             }
 
             @Override

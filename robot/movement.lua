@@ -1,35 +1,9 @@
--- We assume that we are in point of extract
--- If no, you should move it there
-
 local component = require("component")
 local robot = require("robot")
-local text = require("text")
 
-require "update"
+movement = {}
 
-function checkSign()
-    robot.turnRight()
-    local value = component.sign.getValue()
-    robot.turnLeft()
-    robot.forward()
-    return value
-end
-
---[[function goTo(id)
-	while true do
-		local value = checkSign()
-		if(value ~= nil) then
-			value = text.trim(value)
-			if(value ~= id) then goto continue end
-			robot.turnRight()
-			robot.forward()
-			break
-		end
-		::continue::
-	end
-end--]]
-
-function goTo(positionX, positionY, positionZ)
+function movement.goTo(positionX, positionY, positionZ)
     local currentPositionX, currentPositionY, currentPositionZ = component.navigation.getPosition()
     currentPositionX, currentPositionY, currentPositionZ = math.floor(currentPositionX), math.floor(currentPositionY), math.floor(currentPositionZ)
     if currentPositionX == positionX and currentPositionY == positionY and currentPositionZ == positionZ then
@@ -40,6 +14,10 @@ function goTo(positionX, positionY, positionZ)
         moveX(positionX, currentPositionX)
         moveY(positionY, currentPositionY)
     end
+end
+
+function movement.goBack()
+    goTo(8, 4, 3)
 end
 
 function moveY(positionY, currentPositionY)
@@ -67,3 +45,5 @@ function moveX(positionX, currentPositionX)
         end
     end
 end
+
+return movement

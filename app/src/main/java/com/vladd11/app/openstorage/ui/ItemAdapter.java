@@ -12,6 +12,8 @@ import com.vladd11.app.openstorage.Item;
 import com.vladd11.app.openstorage.R;
 import com.vladd11.app.openstorage.Server;
 
+import java.util.Locale;
+
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private final Server server;
@@ -27,18 +29,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public static class ImageItemViewHolder extends ItemViewHolder {
         private final TextView textView;
         private final Server server;
-        private Item item;
 
         public ImageItemViewHolder(@NonNull View view, Server server) {
             super(view);
 
             textView = view.findViewById(R.id.itemView);
             this.server = server;
-            textView.setOnClickListener(v -> server.addItemRequest(item));
         }
 
         public void setItem(@NonNull Item item) {
-            this.item = item;
             textView.setBackground(item.image);
             textView.setText(String.valueOf(item.count));
             textView.setOnClickListener(v -> server.addItemRequest(item));
@@ -57,7 +56,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         public void setItem(@NonNull Item item) {
-            view.setText(String.format("%s (*%d)", item.label, item.count));
+            view.setText(String.format(Locale.getDefault(), "%s (*%d)", item.label, item.count));
             view.setOnClickListener(v -> server.addItemRequest(item));
         }
     }

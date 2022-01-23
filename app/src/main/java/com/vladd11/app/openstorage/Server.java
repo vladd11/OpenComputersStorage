@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -23,8 +24,10 @@ import fi.iki.elonen.NanoHTTPD;
 
 public class Server extends NanoHTTPD {
     public static final String TAG = "Server";
-    private final Queue<Item> itemQueue = new ArrayDeque<>();
-    private final Queue<Chest> updateQueue = new ArrayDeque<>();
+    private final List<Item> requestList = new ArrayList<>();
+    private final List<Chest> updateList = new ArrayList<>();
+    private final List<Chest> chestList = new ArrayList<>();
+    private final List<Item> internalItems = new ArrayList<>();
     private final TextureAtlas atlas;
     private final MutableLiveData<Boolean> isDelivered;
     private boolean sort;
@@ -42,61 +45,51 @@ public class Server extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         try {
             if (session.getMethod() == Method.GET) {
-                final StringBuilder sb = new StringBuilder();
-                while (!itemQueue.isEmpty()) {
-                    final Item item = itemQueue.poll();
-                    assert item != null;
-                    sb.append("take ");
-                    sb.append(item.chest.positionX);
-                    sb.append(" ");
-                    sb.append(item.chest.positionY);
-                    sb.append(" ");
-                    sb.append(item.chest.positionZ);
-                    sb.append(" ");
-                    sb.append(item.chest.side);
-                    sb.append(" ");
-                    sb.append(item.position);
-                    sb.append(" ");
-                    sb.append(item.count);
-                    sb.append(" ");
-                    sb.append(item.chest.id);
-                    sb.append("\n");
+                final ProgramGenerator generator = new ProgramGenerator();
+                generator.takeItems(requestList);
+                for (Chest chest : updateList) {
+                    generator.updateChest(chest);
                 }
-
-                while (!updateQueue.isEmpty()) {
-                    final Chest chest = updateQueue.poll();
-                    assert chest != null;
-                    sb.append("update ");
-                    sb.append(chest.id);
-                    sb.append(" ");
-                    sb.append(chest.side);
-                    sb.append(" ");
-                    sb.append(chest.positionX);
-                    sb.append(" ");
-                    sb.append(chest.positionY);
-                    sb.append(" ");
-                    sb.append(chest.positionZ);
-                    sb.append("\n");
-                }
-
-                if (sort) {
+                if (sort && !internalItems.isEmpty() && !chestList.isEmpty()) {
+                    generator.sortItems(internalItems, chestList);
                     sort = false;
-                    sb.append("sort\n");
                 }
-
-                if (itemList.isEmpty()) sb.append("list");
-                handler.post(() -> isDelivered.setValue(true));
-
-                return newFixedLengthResponse(sb.toString());
+                updateList.clear();
+                generator.listItems();
+                return newFixedLengthResponse(generator.toString());
             } else if (session.getMethod() == Method.POST) {
-                final Scanner s = new Scanner(session.getInputStream()).useDelimiter("\\A");
-                final String result = s.hasNext() ? s.next() : "";
+                itemList.clear();
+                chestList.clear();
+
+                int contentLength = Integer.parseInt(Objects.requireNonNull(session.getHeaders().get("content-length")));
+                byte[] buffer = new byte[contentLength];
+                // Value already in buffer
+                //noinspection ResultOfMethodCallIgnored
+                session.getInputStream().read(buffer, 0, contentLength);
+                final String result = new String(buffer);
 
                 final List<String> arr = new LinkedList<>(Arrays.asList(result.split(Pattern.quote("|"))));
+
+                Scanner scanner = new Scanner(arr.get(0).trim());
+                for (int position = 0; scanner.hasNextLine(); position++) {
+                    final String line = scanner.nextLine();
+                    final String[] sep = line.split(" ");
+                    final String itemName = sep[0];
+                    final int count = Integer.parseInt(sep[1]);
+
+                    internalItems.add(new Item(itemName,
+                            null,
+                            count,
+                            null,
+                            joinAllFromIndex(sep, 3),
+                            position + 1));
+                }
+                scanner.close();
                 arr.remove(0);
+
                 for (int i = 0; i < arr.size(); i++) {
                     //itemsMap.put(arr[i - 1], arr[i]);
-                    final Scanner scanner = new Scanner(arr.get(i).trim());
+                    scanner = new Scanner(arr.get(i).trim());
                     final String storageId = scanner.nextLine();
                     final String[] sepChest = scanner.nextLine().split(" ");
                     Log.d(TAG, "serve: " + Arrays.toString(sepChest));
@@ -104,13 +97,17 @@ public class Server extends NanoHTTPD {
                             Integer.parseInt(sepChest[1]),
                             Integer.parseInt(sepChest[2]),
                             storageId,
-                            Integer.parseInt(sepChest[3]));
+                            Side.values()[Integer.parseInt(sepChest[3])]);
+                    chestList.add(currentChest);
 
                     for (int position = 0; scanner.hasNextLine(); position++) {
                         final String line = scanner.nextLine();
                         final String[] sep = line.split(" ");
                         final String itemName = sep[0];
-                        if (itemName.equals("minecraft:air")) continue;
+                        if (itemName.equals("minecraft:air")) {
+                            currentChest.incrementFreeSpace();
+                            continue;
+                        }
                         final int count = Integer.parseInt(sep[1]);
                         final boolean isNBT = Boolean.parseBoolean(sep[2]);
 
@@ -142,12 +139,12 @@ public class Server extends NanoHTTPD {
                             }
                         }
                     }
+                    scanner.close();
                 }
                 handler.post(() -> adapter.notifyDataSetChanged()); // TODO: rework it
 
                 return newFixedLengthResponse("OK");
-            } else
-                return newFixedLengthResponse(Response.Status.METHOD_NOT_ALLOWED, MIME_PLAINTEXT, "");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +170,7 @@ public class Server extends NanoHTTPD {
     }
 
     public void addItemRequest(Item item) {
-        itemQueue.offer(item);
+        requestList.add(item);
     }
 
     public void setSort(boolean sort) {
@@ -181,6 +178,6 @@ public class Server extends NanoHTTPD {
     }
 
     public void addUpdateRequest(Chest chest) {
-        updateQueue.offer(chest);
+        updateList.add(chest);
     }
 }
