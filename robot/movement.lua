@@ -12,7 +12,6 @@ function movement.goTo(positionX, positionY, positionZ)
 
     if currentPositionZ == positionZ then
         moveX(positionX, currentPositionX)
-        print(positionY, currentPositionY)
         moveY(positionY, currentPositionY)
     end
 end

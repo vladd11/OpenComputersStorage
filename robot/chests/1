@@ -1,55 +1,55 @@
-9 4 3 0
-opencomputers:screen1 1 false Screen (Tier 1)
+9 4 3 4
+opencomputers:robot 1 true Codsworth
+opencomputers:storage 1 true Hard Disk Drive (Tier 3) (4MB)
+minecraft:stone 47 false Stone
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+minecraft:stone 1 false Stone
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true *Hyun-ae
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:case3 1 false Computer Case (Tier 3)
+minecraft:stone 64 false Stone
 opencomputers:robot 1 true Codsworth
 opencomputers:robot 1 true Robby
-minecraft:trapped_chest 1 false Trapped Chest
+opencomputers:robot 1 true *Hyun-ae
+minecraft:chest 63 false Chest
 opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+minecraft:stone_slab 1 false Stone Bricks Slab
+minecraft:coal_ore 64 false Coal Ore
+opencomputers:robot 1 true Robby
+opencomputers:upgrade 1 true Sign I/O Upgrade
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+opencomputers:robot 1 true Robby
+minecraft:stonebrick 1 false Stone Bricks
+minecraft:stone 4 false Stone
+minecraft:stone_brick_stairs 1 false Stone Brick Stairs
 opencomputers:component 1 false Memory (Tier 1)
-opencomputers:robot 1 true SpiritedDusty
-minecraft:air
+minecraft:chest 1 false Chest
+minecraft:crafting_table 1 false Crafting Table
 opencomputers:robot 1 true Robby
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
 opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:air
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:air
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:air
-minecraft:stone 1 false Stone
-minecraft:air
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
+minecraft:stone 13 false Stone
 minecraft:air
 minecraft:air
 minecraft:air
 minecraft:air
 minecraft:air
-minecraft:stone 1 false Stone
-minecraft:air
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
 minecraft:air
 minecraft:air
-minecraft:stone 1 false Stone
+minecraft:air
+minecraft:air
 minecraft:air
 minecraft:air
 minecraft:air
