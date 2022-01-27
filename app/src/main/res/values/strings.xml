@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">OpenStorage</string>
+    <string name="count">Count</string>
+    <string name="chest_id">Chest ID</string>
+    <string name="x_axis">X</string>
+    <string name="y_axis">Y</string>
+    <string name="z_axis">Z</string>
+    <string name="sort_items">Sort items</string>
+    <string name="request_items">Request items</string>
+    <string name="request_add">Add to request</string>
+    <string name="request_now">Request now</string>
+    <string name="cancel">Cancel</string>
+    <string name="not_enought_items">You requested to many items. Currently storage have only %1$d items.</string>
+    <string name="update_chest">Add/update chest</string>
+    <string name="search">Search</string>
 
     <string-array name="sides">
         <item>Bottom</item>

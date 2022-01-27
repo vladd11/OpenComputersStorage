@@ -1,50 +1,47 @@
 9 4 3 0
-minecraft:stone 61 false Stone
-minecraft:air
-opencomputers:robot 1 true Robby
-opencomputers:robot 1 true *Hyun-ae
-minecraft:air
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:robot 1 true Robby
-minecraft:stone 1 false Stone
-opencomputers:robot 1 true Robby
-minecraft:air
-opencomputers:upgrade 1 true Sign I/O Upgrade
-opencomputers:robot 1 true Robby
-opencomputers:robot 1 true Robby
-opencomputers:robot 1 true Robby
-minecraft:stonebrick 1 false Stone Bricks
-opencomputers:robot 1 true Robby
 opencomputers:screen1 1 false Screen (Tier 1)
+opencomputers:robot 1 true Codsworth
+opencomputers:robot 1 true Robby
+minecraft:trapped_chest 1 false Trapped Chest
+opencomputers:robot 1 true Robby
+opencomputers:component 1 false Memory (Tier 1)
+opencomputers:robot 1 true SpiritedDusty
+minecraft:air
+opencomputers:robot 1 true Robby
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+opencomputers:robot 1 true Robby
+minecraft:air
+opencomputers:robot 1 true Robby
+minecraft:air
+opencomputers:robot 1 true Robby
+minecraft:air
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
 opencomputers:robot 1 true Robby
+minecraft:air
 opencomputers:robot 1 true Robby
+minecraft:air
 opencomputers:robot 1 true Robby
-minecraft:sign 1 false Sign
-opencomputers:robot 1 true Robby
-opencomputers:robot 1 true Robby
+minecraft:air
+minecraft:stone 1 false Stone
+minecraft:stone 1 false Stone
+minecraft:air
+minecraft:stone 1 false Stone
+minecraft:air
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
 minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 42 false Stone
-minecraft:stone 1 false Stone
-opencomputers:robot 1 true Robby
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
-minecraft:stone 1 false Stone
+minecraft:air
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
 minecraft:stone 1 false Stone
@@ -53,3 +50,6 @@ minecraft:stone 1 false Stone
 minecraft:air
 minecraft:air
 minecraft:stone 1 false Stone
+minecraft:air
+minecraft:air
+minecraft:air

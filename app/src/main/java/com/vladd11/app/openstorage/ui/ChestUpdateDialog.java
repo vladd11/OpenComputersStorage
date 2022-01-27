@@ -15,10 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.vladd11.app.openstorage.Chest;
+import com.vladd11.app.openstorage.utils.Chest;
 import com.vladd11.app.openstorage.R;
 import com.vladd11.app.openstorage.Server;
-import com.vladd11.app.openstorage.Side;
+import com.vladd11.app.openstorage.utils.Side;
 
 public class ChestUpdateDialog extends DialogFragment {
     private final Server server;

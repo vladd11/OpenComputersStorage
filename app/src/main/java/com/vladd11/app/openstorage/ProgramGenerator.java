@@ -2,7 +2,11 @@ package com.vladd11.app.openstorage;
 
 import androidx.annotation.NonNull;
 
-import java.util.AbstractMap;
+import com.vladd11.app.openstorage.utils.Chest;
+import com.vladd11.app.openstorage.utils.Item;
+import com.vladd11.app.openstorage.utils.ItemRequest;
+import com.vladd11.app.openstorage.utils.Side;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,12 +24,13 @@ public class ProgramGenerator {
     }
 
     @SuppressWarnings("ComparatorCombinators") // items.sort requires Android N
-    public void takeItems(List<Item> items) {
-        Collections.sort(items, (o1, o2) -> o1.chest.positionX - o2.chest.positionX);
+    public void takeItems(List<ItemRequest> items) {
+        Collections.sort(items, (o1, o2) -> o1.item.chest.positionX - o2.item.chest.positionX);
         for (int i = 0; i < items.size(); i++) { // I use it because in this case it will be much more readable than foreach
-            final Item item = items.get(i);
+            final ItemRequest request = items.get(i);
+            final Item item = request.item;
             Side side = item.chest.side;
-            if (i == 0 || !items.get(i - 1).chest.equals(item.chest)) {
+            if (i == 0 || !items.get(i - 1).item.chest.equals(item.chest)) {
                 goTo(item.chest.positionX, item.chest.positionY, item.chest.positionZ);
                 side = turnToSide(item.chest.side);
             } else if (side.isInaccessible()) {
@@ -37,10 +42,10 @@ public class ProgramGenerator {
             builder.append(',');
             builder.append(item.position);
             builder.append(',');
-            builder.append(item.count);
+            builder.append(request.getCount());
             builder.append(")\n");
 
-            if (i == items.size() - 1 || !items.get(i + 1).chest.equals(item.chest)) {
+            if (i == items.size() - 1 || !items.get(i + 1).item.chest.equals(item.chest)) {
                 updateChest(item.chest, side);
                 turnFront();
             }
@@ -62,29 +67,35 @@ public class ProgramGenerator {
     public void sortItems(List<Item> items, List<Chest> chests) {
         Collections.sort(chests, (o1, o2) -> o1.positionX - o2.positionX);
         final List<SortEntry> sort = new ArrayList<>();
+        itemLoop:
         for (Item item : items) {
-            chestLoop: for (Chest chest : chests) {
-                if(chest.getFreeSpaceSlots().size() > 0) {
-                    sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
-                    break;
-                } else {
-                    for (Item checkItem : chest.getItems()) {
-                        if(64 - checkItem.count <= item.count) { // TODO: fix with items like tools (where maxStack < 64)
-                            sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
-                            break chestLoop;
-                        }
+            for (Chest chest : chests) {
+                for (Item checkItem : chest.getItems()) {
+                    if (checkItem.title.equalsIgnoreCase(item.title) &&
+                            64 - checkItem.count >= item.count) { // TODO: fix with items like tools (where maxStack < 64)
+                        checkItem.count -= item.count;
+                        sort.add(new SortEntry(chest, item, checkItem.position));
+                        continue itemLoop;
                     }
+                }
+            }
+
+            for (Chest chest : chests) {
+                if(chest.getFreeSpaceSlots().size() > 0) {
+                    chest.getItems().add(item);
+                    sort.add(new SortEntry(chest, item, chest.getFreeSpaceSlots().remove(0)));
+                    continue itemLoop;
                 }
             }
         }
 
         for (int i = 0; i < sort.size(); i++) {
             final SortEntry entry = sort.get(i);
-            final Chest chest = entry.getChest();
-            final Item item = entry.getItem();
+            final Chest chest = entry.chest;
+            final Item item = entry.item;
 
             Side side = chest.side;
-            if (i == 0 || !sort.get(i - 1).getChest().equals(chest)) {
+            if (i == 0 || !sort.get(i - 1).chest.equals(chest)) {
                 goTo(chest.positionX, chest.positionY, chest.positionZ);
                 side = turnToSide(chest.side);
             } else if (side.isInaccessible()) {
@@ -103,7 +114,7 @@ public class ProgramGenerator {
             builder.append(item.count);
             builder.append(")\n");
 
-            if (i == sort.size() - 1 || !sort.get(i + 1).getChest().equals(chest)) {
+            if (i == sort.size() - 1 || !sort.get(i + 1).chest.equals(chest)) {
                 updateChest(chest, side);
                 turnFront();
             }
@@ -175,18 +186,6 @@ public class ProgramGenerator {
             this.chest = chest;
             this.item = item;
             this.slot = slot;
-        }
-
-        public Chest getChest() {
-            return chest;
-        }
-
-        public Item getItem() {
-            return item;
-        }
-
-        public int getSlot() {
-            return slot;
         }
     }
 }

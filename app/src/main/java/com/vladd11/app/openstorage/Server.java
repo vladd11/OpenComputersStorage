@@ -1,13 +1,13 @@
 package com.vladd11.app.openstorage;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 
-import com.vladd11.app.openstorage.ui.ItemAdapter;
+import com.vladd11.app.openstorage.utils.Chest;
+import com.vladd11.app.openstorage.utils.Item;
+import com.vladd11.app.openstorage.utils.ItemRequest;
+import com.vladd11.app.openstorage.utils.Side;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,21 +22,19 @@ import fi.iki.elonen.NanoHTTPD;
 
 public class Server extends NanoHTTPD {
     public static final String TAG = "Server";
-    private final List<Item> requestList = new ArrayList<>();
+    private final List<ItemRequest> requestList = new ArrayList<>();
     private final List<Chest> updateList = new ArrayList<>();
     private final List<Chest> chestList = new ArrayList<>();
     private final List<Item> internalItems = new ArrayList<>();
-    private final List<Item> itemList = new ArrayList<>();
+    private List<Item> oldItemList = new ArrayList<>();
     private final TextureAtlas atlas;
-    private final MutableLiveData<Boolean> isDelivered;
     private boolean sort;
-    private ItemAdapter adapter;
-    private final Handler handler = new Handler(Looper.getMainLooper());
+    private boolean request;
+    private ServerListener listener;
 
-    public Server(TextureAtlas atlas, MutableLiveData<Boolean> isDelivered) {
+    public Server(TextureAtlas atlas) {
         super(44444);
         this.atlas = atlas;
-        this.isDelivered = isDelivered;
     }
 
     @Override
@@ -44,20 +42,27 @@ public class Server extends NanoHTTPD {
         try {
             if (session.getMethod() == Method.GET) {
                 final ProgramGenerator generator = new ProgramGenerator();
-                generator.takeItems(requestList);
+
+                if (request) {
+                    generator.takeItems(requestList);
+                    request = false;
+                }
+
                 for (Chest chest : updateList) {
                     generator.updateChest(chest);
                 }
+
                 if (sort && !internalItems.isEmpty() && !chestList.isEmpty()) {
                     generator.sortItems(internalItems, chestList);
                     sort = false;
-                    handler.post(() -> isDelivered.setValue(true));
                 }
+
                 updateList.clear();
                 generator.listItems();
+                listener.onCommandsDelivered();
                 return newFixedLengthResponse(generator.toString());
             } else if (session.getMethod() == Method.POST) {
-                itemList.clear();
+                final List<Item> itemList = new ArrayList<>();
                 chestList.clear();
                 internalItems.clear();
 
@@ -100,7 +105,7 @@ public class Server extends NanoHTTPD {
                             Side.values()[Integer.parseInt(sepChest[3])]);
                     chestList.add(currentChest);
 
-                    for (int position = 0; scanner.hasNextLine(); position++) {
+                    for (int position = 1; scanner.hasNextLine(); position++) {
                         final String line = scanner.nextLine();
                         final String[] sep = line.split(" ");
                         final String itemName = sep[0];
@@ -110,44 +115,36 @@ public class Server extends NanoHTTPD {
                         }
                         final int count = Integer.parseInt(sep[1]);
                         final boolean isNBT = Boolean.parseBoolean(sep[2]);
+                        final String title = joinAllFromIndex(sep, 3);
 
-                        // The item have additional info (that can change texture) and I can't check it.
-                        // I won't try to display textures for these items
-                        if (isNBT) {
+                        try {
                             final Item item = new Item(itemName,
-                                    null,
+                                    atlas.loadTexture(itemName, title),
                                     count,
                                     currentChest,
                                     joinAllFromIndex(sep, 3),
                                     position);
                             itemList.add(item);
                             currentChest.addItem(item);
-                        } else {
-                            try {
-                                final Item item = new Item(itemName,
-                                        atlas.loadTexture(itemName),
-                                        count,
-                                        currentChest,
-                                        joinAllFromIndex(sep, 3),
-                                        position);
-                                itemList.add(item);
-                                currentChest.addItem(item);
-                            } catch (IOException e) {
-                                final Item item = new Item(itemName,
-                                        null,
-                                        count,
-                                        currentChest,
-                                        joinAllFromIndex(sep, 3),
-                                        position);
-                                itemList.add(item);
-                                currentChest.addItem(item);
-                                e.printStackTrace();
-                            }
+                        } catch (IOException e) {
+                            final Item item = new Item(itemName,
+                                    null,
+                                    count,
+                                    currentChest,
+                                    title,
+                                    position);
+                            itemList.add(item);
+                            currentChest.addItem(item);
+                            e.printStackTrace();
                         }
                     }
                     scanner.close();
                 }
-                handler.post(() -> adapter.notifyDataSetChanged()); // TODO: rework it
+
+                if (oldItemList.size() == 0 || !oldItemList.containsAll(itemList) || !itemList.containsAll(oldItemList)) {
+                    listener.onItemsUpdated(itemList);
+                }
+                oldItemList = itemList;
 
                 return newFixedLengthResponse("OK");
             }
@@ -166,24 +163,42 @@ public class Server extends NanoHTTPD {
         return sb.toString();
     }
 
-    public void setAdapter(ItemAdapter adapter) {
-        this.adapter = adapter;
-    } // TODO: rework it
+    public interface ServerListener {
+        void onItemsUpdated(List<Item> items);
+
+        void onCommandsDelivered();
+    }
+
+    public void setListener(ServerListener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     public List<Item> getLastItemList() {
-        return itemList;
+        return oldItemList;
     }
 
-    public void addItemRequest(Item item) {
-        requestList.add(item);
+    public void addItemRequest(ItemRequest itemRequest) {
+        requestList.add(itemRequest);
     }
 
     public void setSort(boolean sort) {
         this.sort = sort;
     }
 
+    public boolean getSort() {
+        return sort;
+    }
+
     public void addUpdateRequest(Chest chest) {
         updateList.add(chest);
+    }
+
+    public boolean getRequest() {
+        return request;
+    }
+
+    public void setRequest(boolean request) {
+        this.request = request;
     }
 }

@@ -3,7 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_icon"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:title="@string/search"/>
+
+    <item
         android:icon="@drawable/ic_add_chest"
-        android:title="Add/update chest"
+        android:title="@string/update_chest"
         app:showAsAction="ifRoom" />
 </menu>

@@ -1,4 +1,4 @@
-package com.vladd11.app.openstorage;
+package com.vladd11.app.openstorage.utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.vladd11.app.openstorage;
+package com.vladd11.app.openstorage.utils;
 
 public enum Side {
     BOTTOM,

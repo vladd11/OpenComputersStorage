@@ -21,7 +21,7 @@ function utils.list()
         f:close()
     end
 
-    internet.request("http://192.168.1.163:44444", out)();
+    internet.request(serverIpPort, out)();
 end
 
 function utils.internalList()
