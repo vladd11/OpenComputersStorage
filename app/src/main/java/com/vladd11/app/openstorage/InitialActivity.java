@@ -11,15 +11,26 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.vladd11.app.openstorage.databinding.ActivityInitialBinding;
+import com.vladd11.app.openstorage.databinding.FragmentDownloadBinding;
+import com.vladd11.app.openstorage.ui.DownloadFragment;
+
+import java.io.File;
 
 public class InitialActivity extends AppCompatActivity {
-    private boolean isDownloading;
     private AppBarConfiguration appBarConfiguration;
     private ActivityInitialBinding binding;
+    private ButtonInterface buttonInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(new File(getExternalFilesDir("textures"), "exclusions.json").exists()) {
+            final Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            return;
+        }
 
         binding = ActivityInitialBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -31,14 +42,8 @@ public class InitialActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         binding.fab.setOnClickListener(view -> {
-            if(isDownloading) {
-                final Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            } else {
-                isDownloading = true;
-                navController.navigate(R.id.action_ChoiceFragment_to_DownloadFragment);
-            }
+            if (buttonInterface != null) buttonInterface.onDownloadButtonClicked();
+            binding.fab.setEnabled(false);
         });
     }
 
@@ -47,5 +52,13 @@ public class InitialActivity extends AppCompatActivity {
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_initial);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void setButtonInterface(ButtonInterface buttonInterface) {
+        this.buttonInterface = buttonInterface;
+    }
+
+    public interface ButtonInterface {
+        void onDownloadButtonClicked();
     }
 }

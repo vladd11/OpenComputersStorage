@@ -20,9 +20,8 @@
         android:name="com.vladd11.app.openstorage.ui.DownloadFragment"
         android:label="@string/download_fragment_label"
         tools:layout="@layout/fragment_download">
-
-        <action
-            android:id="@+id/action_DownloadFragment_to_ChoiceFragment"
-            app:destination="@id/ChoiceFragment" />
+        <argument
+            android:name="mods"
+            app:argType="java.util.HashMap" />
     </fragment>
 </navigation>

@@ -22,10 +22,11 @@
         <item>Right</item>
         <item>Left</item>
     </string-array>
-    <string name="title_activity_initial">Preparation to start</string>
     <!-- Strings used for fragments for navigation -->
     <string name="choice_fragment_label">Choice your mods</string>
     <string name="download_fragment_label">Downloading items</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="no_internet">No internet</string>
+    <string name="server_error">Server error</string>
 </resources>
