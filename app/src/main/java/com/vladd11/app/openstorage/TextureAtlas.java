@@ -8,6 +8,7 @@ import android.graphics.drawable.LayerDrawable;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -22,13 +23,15 @@ import java.util.regex.Pattern;
 
 public class TextureAtlas {
     public final Context context;
-    public final Map<String, Drawable> textures = new HashMap<>();
-    public List<String> exclusions = new ArrayList<>();
+    private final Map<String, Drawable> textures = new HashMap<>();
+    private List<String> exclusions = new ArrayList<>();
+    private final File texturesPath;
 
     public TextureAtlas(Context context) {
         this.context = context;
+        this.texturesPath = context.getExternalFilesDir("textures");
         try {
-            final InputStream inputStream = context.getAssets().open("exclusions.json");
+            final FileInputStream inputStream = new FileInputStream(new File(texturesPath, "exclusions.json"));
             final int size = inputStream.available();
             final byte[] byteArray = new byte[size];
             // Already in byte array.
@@ -52,10 +55,12 @@ public class TextureAtlas {
             if (exclusions.contains(itemId)) {
                 drawable = loadTextureFromAssets(itemId.replace(':', '/'));
             } else {
+                // Unify names (because FS don't allow you to create files with symbols like brackets and slashes)
                 drawable = loadTextureFromAssets(itemId.split(":")[0] +
                         '/' +
                         itemTitle.trim()
                                 .replace(' ', '_')
+                                .replace('.', '_')
                                 .replace('/', '_')
                                 .replace('(', '_')
                                 .replace(')', '_').toLowerCase());
@@ -68,7 +73,7 @@ public class TextureAtlas {
 
     private Drawable loadTextureFromAssets(String textureName) {
         try {
-            return Drawable.createFromStream(context.getAssets().open(textureName + ".png"), null);
+            return Drawable.createFromStream(new FileInputStream(new File(texturesPath, textureName + ".png")), null);
         } catch (IOException ignored) { // Cause file not exist
             return null;
         }

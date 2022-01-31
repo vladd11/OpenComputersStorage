@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ChoiceFragment">
+
+    <fragment
+        android:id="@+id/ChoiceFragment"
+        android:name="com.vladd11.app.openstorage.ui.ChoiceFragment"
+        android:label="@string/choice_fragment_label"
+        tools:layout="@layout/fragment_choice">
+
+        <action
+            android:id="@+id/action_ChoiceFragment_to_DownloadFragment"
+            app:destination="@id/DownloadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/DownloadFragment"
+        android:name="com.vladd11.app.openstorage.ui.DownloadFragment"
+        android:label="@string/download_fragment_label"
+        tools:layout="@layout/fragment_download">
+
+        <action
+            android:id="@+id/action_DownloadFragment_to_ChoiceFragment"
+            app:destination="@id/ChoiceFragment" />
+    </fragment>
+</navigation>

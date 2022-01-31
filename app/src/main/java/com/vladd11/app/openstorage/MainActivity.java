@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         setSupportActionBar(toolbar);
 
         server = new Server(atlas);
-        binding.setServer(server);
+        binding.setServerState(server.getServerState());
 
         server.setListener(new Server.ServerListener() {
             @Override
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
             @Override
             public void onCommandsDelivered() {
-                binding.notifyPropertyChanged(BR.server);
+                //binding.notifyPropertyChanged(BR.serverState);
             }
         });
         try {
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     @Override
                     public void onRequestNowClicked(ItemRequest request) {
                         server.addItemRequest(request);
-                        server.setRequest(true);
+                        server.getServerState().setRequest(true);
                     }
                 }).show(getSupportFragmentManager(), "request");
             }

@@ -41,14 +41,14 @@ minecraft:crafting_table 1 false Crafting Table
 opencomputers:robot 1 true Robby
 opencomputers:robot 1 true Robby
 minecraft:stone 13 false Stone
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
-minecraft:air
+ic2:te 64 false Industrial TNT
+ic2:te 64 false Industrial TNT
+ic2:te 64 false Geothermal Generator
+ic2:te 64 false Kinetic Generator
+ic2:te 64 false Semifluid Generator
+ic2:te 64 false Radioisotope Thermoelectric Generator
+ic2:te 64 false Geothermal Generator
+ic2:quantum_helmet 1 true QuantumSuit Helmet
 minecraft:air
 minecraft:air
 minecraft:air

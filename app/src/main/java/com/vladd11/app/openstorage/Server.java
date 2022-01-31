@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.vladd11.app.openstorage.utils.Chest;
 import com.vladd11.app.openstorage.utils.Item;
 import com.vladd11.app.openstorage.utils.ItemRequest;
+import com.vladd11.app.openstorage.utils.ServerState;
 import com.vladd11.app.openstorage.utils.Side;
 
 import java.io.IOException;
@@ -28,12 +29,12 @@ public class Server extends NanoHTTPD {
     private final List<Item> internalItems = new ArrayList<>();
     private List<Item> oldItemList = new ArrayList<>();
     private final TextureAtlas atlas;
-    private boolean sort;
-    private boolean request;
     private ServerListener listener;
+    private final ServerState serverState;
 
     public Server(TextureAtlas atlas) {
         super(44444);
+        serverState = new ServerState(false, false);
         this.atlas = atlas;
     }
 
@@ -43,18 +44,18 @@ public class Server extends NanoHTTPD {
             if (session.getMethod() == Method.GET) {
                 final ProgramGenerator generator = new ProgramGenerator();
 
-                if (request) {
+                if (serverState.isRequest()) {
                     generator.takeItems(requestList);
-                    request = false;
+                    serverState.setRequest(false);
                 }
 
                 for (Chest chest : updateList) {
                     generator.updateChest(chest);
                 }
 
-                if (sort && !internalItems.isEmpty() && !chestList.isEmpty()) {
+                if (serverState.isSort() && !internalItems.isEmpty() && !chestList.isEmpty()) {
                     generator.sortItems(internalItems, chestList);
-                    sort = false;
+                    serverState.setSort(false);
                 }
 
                 updateList.clear();
@@ -182,23 +183,11 @@ public class Server extends NanoHTTPD {
         requestList.add(itemRequest);
     }
 
-    public void setSort(boolean sort) {
-        this.sort = sort;
-    }
-
-    public boolean getSort() {
-        return sort;
+    public ServerState getServerState() {
+        return serverState;
     }
 
     public void addUpdateRequest(Chest chest) {
         updateList.add(chest);
-    }
-
-    public boolean getRequest() {
-        return request;
-    }
-
-    public void setRequest(boolean request) {
-        this.request = request;
     }
 }
