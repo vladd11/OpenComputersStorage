@@ -1,0 +1,9 @@
+mkdir chests
+rm .shrc
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/.shrc
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/find.lua
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/movement.lua
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/server.lua
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/update.lua
+wget https://raw.githubusercontent.com/vladd11/OpenComputersStorage/main/robot/utils.lua
+edit server.lua

@@ -1,7 +1,5 @@
 package com.vladd11.app.openstorage;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.vladd11.app.openstorage.utils.Chest;
@@ -81,6 +79,10 @@ public class Server extends NanoHTTPD {
                     final String line = scanner.nextLine();
                     final String[] sep = line.split(" ");
                     final String itemName = sep[0];
+                    if (itemName.equals("minecraft:air")) {
+                        continue;
+                    }
+
                     final int count = Integer.parseInt(sep[1]);
 
                     internalItems.add(new Item(itemName,
@@ -98,7 +100,6 @@ public class Server extends NanoHTTPD {
                     scanner = new Scanner(arr.get(i).trim());
                     final String storageId = scanner.nextLine();
                     final String[] sepChest = scanner.nextLine().split(" ");
-                    Log.d(TAG, "serve: " + Arrays.toString(sepChest));
                     final Chest currentChest = new Chest(Integer.parseInt(sepChest[0]),
                             Integer.parseInt(sepChest[1]),
                             Integer.parseInt(sepChest[2]),

@@ -30,6 +30,8 @@ function utils.internalList()
         local item = component.inventory_controller.getStackInInternalSlot(i)
         if item ~= nil then
             out = out .. item.name .. " " .. item.size .. " " .. tostring(item.hasTag) .. " " .. item.label .. "\n"
+        else
+            out = out .. "minecraft:air\n"
         end
     end
     return out

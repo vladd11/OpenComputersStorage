@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +47,7 @@ public class TextureAtlas {
     }
 
     static class TextureConfig {
+        @SerializedName("id")
         public List<String> id;
     }
 

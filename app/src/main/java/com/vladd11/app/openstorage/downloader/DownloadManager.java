@@ -77,7 +77,7 @@ public class DownloadManager {
 
         for (Map.Entry<String, String> mod : mods.entrySet()) {
             client.newCall(new Request.Builder()
-                    .url("https://storage.yandexcloud.net/textures/" + mod.getValue().toLowerCase().replace(' ', '_') + ".zip")
+                    .url("https://storage.yandexcloud.net/textures/" + mod.getValue() + ".zip")
                     .addHeader("Host", "storage.yandexcloud.net").build())
                     .enqueue(new Callback() {
                         @Override
