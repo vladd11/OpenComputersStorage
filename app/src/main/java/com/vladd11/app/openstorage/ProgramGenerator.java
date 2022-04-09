@@ -63,6 +63,10 @@ public class ProgramGenerator {
         builder.append(")\n");
     }
 
+    public void craft(Item item) {
+
+    }
+
     @SuppressWarnings("ComparatorCombinators") // items.sort requires Android N
     public void sortItems(List<Item> items, List<Chest> chests) {
         Collections.sort(chests, (o1, o2) -> o1.positionX - o2.positionX);
@@ -103,7 +107,7 @@ public class ProgramGenerator {
             }
 
             builder.append("robot.select(");
-            builder.append(i + 1);
+            builder.append(entry.item.position);
             builder.append(")\n");
 
             builder.append("component.inventory_controller.dropIntoSlot(");

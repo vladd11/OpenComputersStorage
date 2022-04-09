@@ -1,0 +1,55 @@
+10 4 3 4
+minecraft:air
+minecraft:stone 1 true Granit
+opencomputers:upgrade 1 false Inventory Upgrade
+opencomputers:upgrade 2 true Battery Upgrade (Tier 3)
+opencomputers:component 2 true Memory (Tier 3.5)
+opencomputers:component 1 true Memory (Tier 3.5)
+opencomputers:component 1 true Memory (Tier 3.5)
+opencomputers:keyboard 1 true Keyboard
+minecraft:air
+opencomputers:upgrade 1 true Navigation Upgrade
+opencomputers:upgrade 1 true Sign I/O Upgrade
+opencomputers:screen1 1 true Screen (Tier 1)
+opencomputers:storage 2 true EEPROM (Lua BIOS)
+opencomputers:component 2 true Central Processing Unit (CPU) (Tier 3)
+opencomputers:case3 2 false Computer Case (Tier 3)
+minecraft:chest 1 false Chest
+minecraft:air
+opencomputers:card 1 true Internet Card
+minecraft:air
+minecraft:air
+opencomputers:upgrade 2 true Chunkloader Upgrade
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air
+minecraft:air

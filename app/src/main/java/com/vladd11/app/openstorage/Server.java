@@ -90,7 +90,7 @@ public class Server extends NanoHTTPD {
                             count,
                             null,
                             joinAllFromIndex(sep, 3),
-                            position + 1));
+                            position));
                 }
                 scanner.close();
                 arr.remove(0);
